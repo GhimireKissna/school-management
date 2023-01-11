@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	r := mux.NewRoutes
+	r := mux.NewRouter()
 	routes.RegisterSchoolRoutes(r)
 	http.Handle("/", r)
 	println("server is starting")
