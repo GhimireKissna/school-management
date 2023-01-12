@@ -8,9 +8,9 @@ import (
 	"gorm.io/gorm"
 )
 
-var db *gorm.DB
+// var db *gorm.DB
 
-func connect() {
+func Connect() (*gorm.DB,error ){
 	viper.SetConfigFile("confit.json")
 	viper.ReadInConfig()
 
@@ -19,15 +19,12 @@ func connect() {
 	dbHost := viper.Get("host")
 	dbPort := viper.Get("port")
 	dbName := viper.Get("database")
-
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", &dbUser, &dbPassword, &dbHost, &dbPort, &dbName)
-	d, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbUser, dbPassword, dbHost, dbPort, dbName)
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
-		panic(err)
+		return db, err
 	}
-	db = d
+	return db, err
 }
-func GetDB() *gorm.DB {
-	return db
-}
+

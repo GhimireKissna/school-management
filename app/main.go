@@ -2,18 +2,21 @@ package main
 
 import (
 	"log"
-	"net/http"
-
-	"school_management/pkg/routes"
-
-	"github.com/gorilla/mux"
+	// "net/http"
+	"github.com/gofiber/fiber/v2"
+	"school_management/config"
+	// "github.com/gorilla/mux"
 )
 
 func main() {
-	r := mux.NewRouter()
-	routes.RegisterSchoolRoutes(r)
-	http.Handle("/", r)
+	app := fiber.New()
+	config.Connect()
+	// r := mux.NewRouter()
+	// routes.RegisterSchoolRoutes(r)
+	// http.Handle("/", r)
+
+	// log.Fatal(http.ListenAndServe("localhost:8009", r))
+	log.Fatal(app.Listen(":8009"))
 	println("server is starting")
-	log.Fatal(http.ListenAndServe("localhost:8009", r))
 
 }
