@@ -1,9 +1,7 @@
 {
-    
     "username":"root",
     "password":"Krishna@7",
     "host":"localhost",
-    "port":"3306",
+    "port":3306,
     "database":"school"
-
 }
