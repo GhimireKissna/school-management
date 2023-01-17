@@ -6,8 +6,9 @@ type Guardians struct{
 	CreatedAt 		time.Time
 	Name    		string `json:"name"`
 	Address   		string `json:"address"`
+	Phone			int `json:"phone"`
 	Email     		string `json:"email"`
-	Phone     		int    `json:"phone"`
-	StudentRefer 	int `json:"student_id"`
-	Student 		Student `gorm:"foreignkey:StudentRefer"` 
+	IsActive		bool `json:"isactive"`
+	// StudentRefer 	int `json:"-"`
+	// Student 		Student `gorm:"foreignkey:StudentRefer"` 
 }

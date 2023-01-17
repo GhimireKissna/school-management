@@ -9,6 +9,8 @@ import (
 	"gorm.io/gorm"
 )
 
+var DB *gorm.DB
+
 func Connect() (*gorm.DB, error ){
 	viper.SetConfigFile("config.json")
 	viper.ReadInConfig()
@@ -25,6 +27,7 @@ func Connect() (*gorm.DB, error ){
 	if err != nil {
 		return nil, err
 	}
+	DB = db
 	return db, nil
 }
 
