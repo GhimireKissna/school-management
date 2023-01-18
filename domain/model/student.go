@@ -11,4 +11,5 @@ type Student struct {
 	Address   	string `json:"address"`
 	Email     	string `json:"email"`
 	Phone     	int    `json:"phone"`
+	IsActive	bool	`json:"isactive"`
 }
