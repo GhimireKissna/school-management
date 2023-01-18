@@ -1,8 +1,6 @@
 package account
 
 import (
-	// "fiber-gorm/database"
-
 	"school_management/config"
 	"school_management/domain/model"
 
@@ -15,7 +13,6 @@ func GetGuardians(ctx *fiber.Ctx) error {
 }
 
 func NewGuardian(ctx *fiber.Ctx) error{
-	// ctx.Body()
 	guardian := new(model.Guardians)
 	if err := ctx.BodyParser(&guardian); err != nil{
 		return ctx.SendString(err.Error())
@@ -40,7 +37,6 @@ func DeleteGuardian(ctx *fiber.Ctx) error{
 }
 func UpdateGuardian(ctx *fiber.Ctx) error{
 	id := ctx.Params("id")
-	println(id,"***********************************")
 	var guardian model.Guardians
 	config.DB.Model(&guardian).Where("id = ?", id).Updates(model.Guardians{Name:"sampurna"}).Scan(&guardian)
 	// return ctx.JSON(GuardianResponse{
@@ -64,7 +60,7 @@ func ToggleGuardianStatus(ctx *fiber.Ctx) error{
 	}
 	config.DB.Model(&guardian).Update("is_active", !guardian.IsActive) 
 	return ctx.JSON(fiber.Map {
-		"message": "User Status Updated sucessfully",
+		"message": "Guardians Status Updated sucessfully",
 	})
 		
 	}
