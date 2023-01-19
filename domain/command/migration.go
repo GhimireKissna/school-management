@@ -10,5 +10,6 @@ func main(){
 		println("Error Connecting to database")
 	}
 	db.AutoMigrate(&model.Guardians{},&model.Principle{}, &model.Student{})
+	db.AutoMigrate(&model.Courses{})
 	println("Migartion successful.")
 }

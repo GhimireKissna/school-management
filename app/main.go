@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"log"
 	"school_management/config"
+	"school_management/course"
 	"school_management/v1/account"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -15,6 +17,7 @@ func main() {
 		fmt.Println(err)
 	}
 	account.AccountRoutes(app)
+	course.CourseRoutes(app)
 	log.Fatal(app.Listen(":8009"))
 	println("server is starting")
 }

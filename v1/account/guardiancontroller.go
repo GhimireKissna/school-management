@@ -17,13 +17,11 @@ func NewGuardian(ctx *fiber.Ctx) error{
 	if err := ctx.BodyParser(&guardian); err != nil{
 		return ctx.SendString(err.Error())
 	}
-	println(guardian.Name,"****************************************")
 	config.DB.Create(&guardian)
 	return ctx.JSON(guardian)
 }
 func GetGuardian(ctx *fiber.Ctx) error{
 	id := ctx.Params("id")
-	println(id,"_____________________________________")
 	var guardian model.Guardians
 	config.DB.Find(&guardian, id)
 	return ctx.JSON(guardian)
