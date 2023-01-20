@@ -8,6 +8,7 @@ func  AccountRoutes(app *fiber.App){
 	app.Delete("/api/v1/guardians/:id/delete/", DeleteGuardian)
 	app.Patch("/api/v1/guardians/:id/update/", UpdateGuardian)
 	app.Patch("/api/v1/guardians/:id/toggle-status/", ToggleGuardianStatus)
+	app.Patch("/api/v1/guardians/:id/change/", ChangePassword)
 
 	app.Get("/api/v1/principle/list/", GetPrinciple)
 	app.Post("/api/v1/principle/create/", NewPrinciple)

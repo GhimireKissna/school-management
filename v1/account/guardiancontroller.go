@@ -5,7 +5,17 @@ import (
 	"school_management/domain/model"
 
 	"github.com/gofiber/fiber/v2"
+	"golang.org/x/crypto/bcrypt"
 )
+func hashPassword(password string)(string, error){
+	bytes,err := bcrypt.GenerateFromPassword([]byte(password),14)
+	return string(bytes),err
+}
+func checkPasswordHash(password, hash string) bool{
+	err := bcrypt.CompareHashAndPassword([]byte(hash),[]byte(password))
+	return err == nil
+}
+
 func GetGuardians(ctx *fiber.Ctx) error {
 	var guardians []model.Guardians
 	config.DB.Find(&guardians)
@@ -17,7 +27,15 @@ func NewGuardian(ctx *fiber.Ctx) error{
 	if err := ctx.BodyParser(&guardian); err != nil{
 		return ctx.SendString(err.Error())
 	}
-	config.DB.Create(&guardian)
+	hash, err := hashPassword(guardian.Password)
+	if err != nil{
+		return ctx.JSON(hash)
+	}
+	guardian.Password = hash
+	if err := config.DB.Create(&guardian).Error; err != nil{
+		return ctx.JSON(hash)
+	}
+	// config.DB.Create(&guardian)
 	return ctx.JSON(guardian)
 }
 func GetGuardian(ctx *fiber.Ctx) error{
@@ -62,3 +80,39 @@ func ToggleGuardianStatus(ctx *fiber.Ctx) error{
 	})
 		
 	}
+func ChangePassword(ctx *fiber.Ctx) error{
+	id := ctx.Params("id")
+	var guardian model.Guardians
+	var changePassword model.ChangePassword
+		err := config.DB.First(&guardian,id).Error
+	if err != nil{
+		return ctx.JSON(fiber.Map{
+			"message":"Guardian doesnot exist",
+		})
+	}
+	if err := ctx.BodyParser(&changePassword); err != nil{
+		return ctx.JSON(fiber.Map{
+			"message":err,
+		})
+	}
+	if !checkPasswordHash(changePassword.OldPassword, guardian.Password){
+		return ctx.JSON(fiber.Map{
+			"message":"invalid password",
+		})
+	}
+		
+		newHash, err := hashPassword(changePassword.NewPassword)
+		if err != nil{
+			return ctx.JSON(fiber.Map{
+				"message": err,
+		})
+	}
+	if err := config.DB.Model(&guardian).Update("password",newHash).Error; err != nil{
+		return ctx.JSON(fiber.Map{
+			"message": err,
+		})
+	}
+		return ctx.JSON(fiber.Map{
+			"message":"Password Change Sucessfully",
+		})
+}

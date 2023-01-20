@@ -8,6 +8,7 @@ type Guardians struct{
 	Address   		string `json:"address"`
 	Phone			int `json:"phone"`
 	Email     		string `json:"email"`
+	Password		string	`json:"password"`
 	IsActive		bool `json:"isactive"`
 	// StudentRefer 	int `json:"-"`
 	// Student 		Student `gorm:"foreignkey:StudentRefer"` 
