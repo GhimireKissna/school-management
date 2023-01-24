@@ -1,6 +1,7 @@
 package account
 
 import (
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"school_management/config"
 	"school_management/domain/model"
@@ -42,6 +43,7 @@ func TogglePrincipleStatus(ctx *fiber.Ctx) error{
 	id := ctx.Params("id")
 	var principle model.Principle
 	err := config.DB.First(&principle,id).Error
+	fmt.Println(principle,"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 	if err != nil {
 		return ctx.JSON("Principle Not Found")
 	}

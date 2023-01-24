@@ -24,7 +24,7 @@ func GetGuardians(ctx *fiber.Ctx) error {
 
 func NewGuardian(ctx *fiber.Ctx) error{
 	guardian := new(model.Guardians)
-	if err := ctx.BodyParser(&guardian); err != nil{
+	if err := ctx.BodyParser(&guardian); err != nil{ //it is used when something is display on body of postman
 		return ctx.SendString(err.Error())
 	}
 	hash, err := hashPassword(guardian.Password)

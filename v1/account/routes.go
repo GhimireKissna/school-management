@@ -22,5 +22,9 @@ func  AccountRoutes(app *fiber.App){
 	app.Get("/api/v1/student/:id/get/", GetStudent)
 	app.Delete("/api/v1/student/:id/delete/", DeleteStudent)
 	app.Patch("/api/v1/student/:id/update/", UpdateStudent)
-	app.Patch("/api/v1/student/:id/toggle-status", ToggleStudentStatus)
+	app.Patch("/api/v1/student/:id/toggle-status/", ToggleStudentStatus)
+
+
+	app.Post("api/v1/attendance/student/:id/create/", Checkin)
+	app.Patch("api/v1/attendance/student/update", CheckOut)
 }
