@@ -76,6 +76,12 @@ func CheckOut(ctx *fiber.Ctx) error{
 			"error":"Student Was Not Check In",
 		})
 	 }
+	 err = config.DB.Where("student =? AND year =? AND month=? AND day =?",id,year,month,day).Find(&attendance).Error
+	 if err == nil{
+		return ctx.JSON(fiber.Map{
+			"message":"Student Was Already Check Out",
+		})
+	 }
 	hour := time.Now().Hour()
 	minute := time.Now().Minute()
 	second := time.Now().Second()
