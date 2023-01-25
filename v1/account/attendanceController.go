@@ -8,14 +8,16 @@ import (
 	"time"
 	"github.com/gofiber/fiber/v2"
 	)
-func Checkin(ctx *fiber.Ctx) error{
+func CheckIn(ctx *fiber.Ctx) error{
 	var student model.Student
 	var attendance model.Attendance
 	id := ctx.Params("id")
 	idInt, _ := strconv.Atoi(id)
-	err := config.DB.Find(&student,idInt).Error
+	err := config.DB.First(&student,idInt).Error
 	if err != nil {
-		return ctx.JSON("Student Was Not Found")
+		return ctx.JSON(fiber.Map{
+		"message":"Student Was Not Found",
+		})
 	}
 
 	y,m,d:= time.Now().Date()
@@ -25,8 +27,7 @@ func Checkin(ctx *fiber.Ctx) error{
   	year := str1
     month:= str2
 	day  := str3
-
-	err = config.DB.First(&attendance).Where("student=? AND year =? AND month =? AND day =?", id, year,month,day).Error
+	err = config.DB.Debug().Where("student=? AND year =? AND month =? AND day =?", id, year,month,day).First(&attendance).Error
 		if err == nil{
 			return ctx.JSON(fiber.Map{
 				"error":"User already CheckIn",
@@ -51,12 +52,30 @@ func Checkin(ctx *fiber.Ctx) error{
 }
 
 func CheckOut(ctx *fiber.Ctx) error{
-	attendance:= new(model.Attendance)
-	if err := ctx.BodyParser(&attendance); err != nil{
-		return ctx.SendString(err.Error())
+	var student model.Student
+	var attendance model.Attendance
+	id := ctx.Params("id")
+	idInt, _ := strconv.Atoi(id)
+	err := config.DB.First(&student,idInt).Error
+	if err != nil {
+		return ctx.JSON(fiber.Map{
+		"message":"Student Was Not Found",
+		})
 	}
-	// fmt.Println(attendance.Student,"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 	var checkOut string
+	y,m,d := time.Now().Date()
+	str4 := strconv.Itoa(y)
+	str5 := strconv.Itoa(int(m))
+	str6 := strconv.Itoa(d)
+	year := str4
+	month := str5
+	day := str6
+	err = config.DB.Debug().Where("student =? AND year =? AND month =? AND day =?",id,year,month,day).First(&attendance).Error
+		if err != nil {
+		return ctx.JSON(fiber.Map{
+			"error":"Student Was Not Check In",
+		})
+	 }
 	hour := time.Now().Hour()
 	minute := time.Now().Minute()
 	second := time.Now().Second()
@@ -65,10 +84,8 @@ func CheckOut(ctx *fiber.Ctx) error{
 	str2 := strconv.Itoa(minute)
 	str3:= strconv.Itoa(second)
 	checkOut = str1 + ":" + str2 + ":" +str3
-
-	query := fmt.Sprintf("UPDATE attendances SET check_out = '%s' Where student = %d",checkOut,attendance.Student)
+	query := fmt.Sprintf("UPDATE attendances SET check_out = '%s' WHERE student = %d AND year= '%s' AND month = '%s' AND day ='%s'",checkOut,idInt,year,month,day)
 	config.DB.Exec(query)
-	// fmt.Println(query,"??????????????????????????????????????????????????")
 	return ctx.JSON(fiber.Map{
 		"message":"Student Check Out Sucessfully",
 	})

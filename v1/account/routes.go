@@ -25,6 +25,6 @@ func  AccountRoutes(app *fiber.App){
 	app.Patch("/api/v1/student/:id/toggle-status/", ToggleStudentStatus)
 
 
-	app.Post("api/v1/attendance/student/:id/create/", Checkin)
-	app.Patch("api/v1/attendance/student/update", CheckOut)
+	app.Post("api/v1/student/:id/checkin/", CheckIn)
+	app.Patch("api/v1/student/:id/checkout/", CheckOut)
 }
